@@ -1,0 +1,6 @@
+target
+.idea
+/.settings
+/spring-mvc-integration-tests.iml
+.classpath
+.project
