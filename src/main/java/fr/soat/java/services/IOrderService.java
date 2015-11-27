@@ -6,6 +6,8 @@ import fr.soat.java.exceptions.BusinessException;
 public interface IOrderService {
     OrderDto saveOrder(OrderDto orderDto) throws BusinessException;
 
+    OrderDto updateOrder(OrderDto orderDto) throws BusinessException;
+
     OrderDto getOrder(String orderId);
 
     void deleteOrder(String orderId);

@@ -10,6 +10,8 @@ import fr.soat.java.services.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class OrderService implements IOrderService {
 
@@ -23,7 +25,14 @@ public class OrderService implements IOrderService {
         if (orderDto.getProductList().size() > NB_MAX_PRODUCTS) {
             throw new BusinessException();
         }
+        orderDto.setCreationDate(new Date());
         return fromOrderEntity(orderRepository.save(toOrderEntity(orderDto)));
+    }
+
+    @Override
+    public OrderDto updateOrder(OrderDto orderDto) throws BusinessException {
+        orderDto.setModificationDate(new Date());
+        return saveOrder(orderDto);
     }
 
     @Override

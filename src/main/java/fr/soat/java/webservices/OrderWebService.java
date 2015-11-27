@@ -39,7 +39,9 @@ public class OrderWebService {
             @PathVariable String orderId,
             @RequestBody Order order) throws BusinessException {
         order.setId(orderId);
-        return saveOrder(order);
+        ResponseWrapper<Order> response = new ResponseWrapper<>();
+        response.setData(fromOrderDto(orderService.updateOrder(toOrderDto(order))));
+        return response;
     }
 
     @RequestMapping(value = "/{orderId}", method = RequestMethod.DELETE)
@@ -56,7 +58,7 @@ public class OrderWebService {
         order.setCreationDate(dto.getCreationDate());
         order.setId(dto.getId());
         order.setModificationDate(dto.getModificationDate());
-        dto.getProductList().forEach((productDto -> order.getProductList().add(fromProductDto(productDto))));
+        dto.getProductList().forEach((productDto -> order.getProducts().add(fromProductDto(productDto))));
         return order;
     }
 
@@ -71,7 +73,7 @@ public class OrderWebService {
         dto.setCreationDate(order.getCreationDate());
         dto.setId(order.getId());
         dto.setModificationDate(order.getModificationDate());
-        order.getProductList().forEach((product -> dto.getProductList().add(toProductDto(product))));
+        order.getProducts().forEach((product -> dto.getProductList().add(toProductDto(product))));
         return dto;
     }
 

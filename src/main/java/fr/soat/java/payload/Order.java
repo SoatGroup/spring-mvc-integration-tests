@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Order {
     private String id;
-    private List<Product> productList;
+    private List<Product> products;
     private Date creationDate;
     private Date modificationDate;
 
@@ -19,11 +19,11 @@ public class Order {
         this.id = id;
     }
 
-    public List<Product> getProductList() {
-        if (productList == null) {
-            productList = new ArrayList<>();
+    public List<Product> getProducts() {
+        if (products == null) {
+            products = new ArrayList<>();
         }
-        return productList;
+        return products;
     }
 
     public Date getCreationDate() {
