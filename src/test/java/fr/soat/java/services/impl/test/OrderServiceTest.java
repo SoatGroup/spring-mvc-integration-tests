@@ -4,7 +4,7 @@ package fr.soat.java.services.impl.test;
 import fr.soat.java.dao.IOrderRepository;
 import fr.soat.java.dto.OrderDto;
 import fr.soat.java.dto.ProductDto;
-import fr.soat.java.exceptions.BusinessException;
+import fr.soat.java.exceptions.TooManyProductsException;
 import fr.soat.java.model.OrderEntity;
 import fr.soat.java.model.ProductEntity;
 import fr.soat.java.services.impl.OrderService;
@@ -33,7 +33,7 @@ public class OrderServiceTest {
 
     }
 
-    @Test(expected = BusinessException.class)
+    @Test(expected = TooManyProductsException.class)
     public void testMoreThanProductLimitSaveOrder() throws Exception {
         when(orderRepository.save(any(OrderEntity.class))).thenReturn(null);
         OrderDto orderDto = new OrderDto();

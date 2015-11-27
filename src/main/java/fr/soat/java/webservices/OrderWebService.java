@@ -1,17 +1,24 @@
 package fr.soat.java.webservices;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import fr.soat.java.dto.OrderDto;
 import fr.soat.java.dto.ProductDto;
-import fr.soat.java.exceptions.BusinessException;
+import fr.soat.java.exceptions.OrderNotFoundException;
+import fr.soat.java.exceptions.TooManyProductsException;
 import fr.soat.java.payload.Order;
 import fr.soat.java.payload.Product;
 import fr.soat.java.payload.wrappers.ResponseWrapper;
 import fr.soat.java.services.IOrderService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/order")
+@RequestMapping(value= "/order")
 public class OrderWebService {
 
     @Autowired
@@ -19,7 +26,7 @@ public class OrderWebService {
 
     @RequestMapping(value = "/{orderId}", method = RequestMethod.GET)
     public ResponseWrapper<Order> getOrder(
-            @PathVariable String orderId) {
+            @PathVariable String orderId) throws OrderNotFoundException{
         ResponseWrapper<Order> response = new ResponseWrapper<>();
         response.setData(fromOrderDto(orderService.getOrder(orderId)));
         return response;
@@ -28,7 +35,7 @@ public class OrderWebService {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseWrapper<Order> saveOrder(
-            @RequestBody Order order) throws BusinessException {
+            @RequestBody Order order) throws TooManyProductsException {
         ResponseWrapper<Order> response = new ResponseWrapper<>();
         response.setData(fromOrderDto(orderService.saveOrder(toOrderDto(order))));
         return response;
@@ -37,7 +44,7 @@ public class OrderWebService {
     @RequestMapping(value = "/{orderId}", method = RequestMethod.PUT)
     public ResponseWrapper<Order> updateOrder(
             @PathVariable String orderId,
-            @RequestBody Order order) throws BusinessException {
+            @RequestBody Order order) throws TooManyProductsException {
         order.setId(orderId);
         ResponseWrapper<Order> response = new ResponseWrapper<>();
         response.setData(fromOrderDto(orderService.updateOrder(toOrderDto(order))));

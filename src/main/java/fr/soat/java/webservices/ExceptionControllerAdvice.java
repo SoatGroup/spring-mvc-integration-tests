@@ -1,6 +1,7 @@
 package fr.soat.java.webservices;
 
-import fr.soat.java.exceptions.BusinessException;
+import fr.soat.java.exceptions.OrderNotFoundException;
+import fr.soat.java.exceptions.TooManyProductsException;
 import fr.soat.java.payload.wrappers.ResponseWrapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -9,9 +10,16 @@ import org.springframework.web.bind.annotation.*;
 public class ExceptionControllerAdvice {
 
     @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
-    @ExceptionHandler(BusinessException.class)
+    @ExceptionHandler(TooManyProductsException.class)
     @ResponseBody
-    public ResponseWrapper<String> handleBusinessException(BusinessException exception) {
+    public ResponseWrapper<String> handleBusinessException(TooManyProductsException exception) {
+        return handleExceptionObject(exception);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(OrderNotFoundException.class)
+    @ResponseBody
+    public ResponseWrapper<String> handleOrderNotFoundException(OrderNotFoundException exception) {
         return handleExceptionObject(exception);
     }
 

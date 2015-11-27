@@ -3,7 +3,8 @@ package fr.soat.java.services.impl;
 import fr.soat.java.dao.IOrderRepository;
 import fr.soat.java.dto.OrderDto;
 import fr.soat.java.dto.ProductDto;
-import fr.soat.java.exceptions.BusinessException;
+import fr.soat.java.exceptions.OrderNotFoundException;
+import fr.soat.java.exceptions.TooManyProductsException;
 import fr.soat.java.model.OrderEntity;
 import fr.soat.java.model.ProductEntity;
 import fr.soat.java.services.IOrderService;
@@ -21,23 +22,27 @@ public class OrderService implements IOrderService {
     private static final int NB_MAX_PRODUCTS = 2;
 
     @Override
-    public OrderDto saveOrder(OrderDto orderDto) throws BusinessException {
+    public OrderDto saveOrder(OrderDto orderDto) throws TooManyProductsException {
         if (orderDto.getProductList().size() > NB_MAX_PRODUCTS) {
-            throw new BusinessException();
+            throw new TooManyProductsException();
         }
         orderDto.setCreationDate(new Date());
         return fromOrderEntity(orderRepository.save(toOrderEntity(orderDto)));
     }
 
     @Override
-    public OrderDto updateOrder(OrderDto orderDto) throws BusinessException {
+    public OrderDto updateOrder(OrderDto orderDto) throws TooManyProductsException {
         orderDto.setModificationDate(new Date());
         return saveOrder(orderDto);
     }
 
     @Override
-    public OrderDto getOrder(String orderId) {
-        return fromOrderEntity(orderRepository.findOne(orderId));
+    public OrderDto getOrder(String orderId) throws OrderNotFoundException{
+        OrderEntity found = orderRepository.findOne(orderId);
+        if(found == null){
+            throw new OrderNotFoundException();
+        }
+        return fromOrderEntity(found);
     }
 
     @Override
