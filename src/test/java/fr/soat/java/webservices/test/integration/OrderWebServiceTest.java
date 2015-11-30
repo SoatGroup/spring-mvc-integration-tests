@@ -42,5 +42,13 @@ public class OrderWebServiceTest {
                 .content(payload);
         this.mockMvc.perform(req).andExpect(status().isOk());
     }
+
+    @Test
+    public void testGetOrder() throws Exception {
+        MockHttpServletRequestBuilder req = get(SERVICE_URI + "/" + "test").contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.parseMediaType(MediaType.APPLICATION_JSON_UTF8_VALUE));
+        this.mockMvc.perform(req)
+                .andExpect(status().isNotFound());
+    }
 }
 
