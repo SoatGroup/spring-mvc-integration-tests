@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -35,10 +36,12 @@ public class OrderWebServiceTest {
 
     @Test
     public void testSaveOrder() throws Exception {
-        MockHttpServletRequestBuilder req = get(SERVICE_URI + "/" + "test").contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.parseMediaType(MediaType.APPLICATION_JSON_UTF8_VALUE));
+        String payload = "{ \"products\": [{ \"name\": \"Mon produit\" }]}";
+        MockHttpServletRequestBuilder req = post(SERVICE_URI).contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.parseMediaType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .content(payload);
         this.mockMvc.perform(req)
-                .andExpect(status().isNotFound());
+                .andExpect(status().isOk());
     }
 }
 
