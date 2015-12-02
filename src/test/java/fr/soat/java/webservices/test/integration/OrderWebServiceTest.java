@@ -1,6 +1,7 @@
 package fr.soat.java.webservices.test.integration;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,6 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,10 +38,9 @@ public class OrderWebServiceTest {
     public void testSaveOrder() throws Exception {
         String payload = "{ \"products\": [{ \"name\": \"Mon produit\" }]}";
         MockHttpServletRequestBuilder req = post(SERVICE_URI).contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.parseMediaType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .accept(MediaType.APPLICATION_JSON_UTF8)
                 .content(payload);
-        this.mockMvc.perform(req)
-                .andExpect(status().isOk());
+        this.mockMvc.perform(req).andExpect(status().isOk());
     }
 }
 

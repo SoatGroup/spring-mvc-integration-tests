@@ -1,26 +1,23 @@
 package fr.soat.java.payload.wrappers;
 
+import fr.soat.java.enums.Status;
+
 public class ResponseWrapper<T> {
 
-	public enum Severity {
-		ERROR,
-		SUCCESS
-	}
-
-	private Severity severity;
+	private Status status;
 
 	private T data;
 
 	public ResponseWrapper() {
-		this.severity = Severity.SUCCESS;
+		this.status = Status.SUCCESS;
 	}
 
-	public Severity getSeverity() {
-		return severity;
+	public Status getStatus() {
+		return status;
 	}
 
-	public void setSeverity(Severity severity) {
-		this.severity = severity;
+	public void setStatus(Status status) {
+		this.status = status;
 	}
 
 	public T getData() {
