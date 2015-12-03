@@ -1,9 +1,13 @@
 package fr.soat.java.webservices.test.integration;
 
+import com.jayway.jsonpath.JsonPath;
 import fr.soat.java.dao.IOrderRepository;
 import fr.soat.java.enums.Status;
 import fr.soat.java.model.OrderEntity;
+import fr.soat.java.payload.Order;
+import fr.soat.java.payload.wrappers.ResponseWrapper;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,13 +17,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -54,30 +56,35 @@ public class OrderWebServiceTest {
     @Test
     public void testSaveOrder() throws Exception {
         String payload = "{ \"products\": [{ \"name\": \"Mon produit\" }]}";
-        this.mockMvc.perform(post(SERVICE_URI).contentType(MediaType.APPLICATION_JSON)
+        String jsonResponse = this.mockMvc.perform(post(SERVICE_URI).contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .content(payload)
-		).andExpect(status().isOk())
-		.andExpect(jsonPath("$.data.id").isNotEmpty());
-    }
+		).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+		Order responseOrder = JsonPath.parse(jsonResponse).read("$.data",Order.class);
+		Assert.assertNotNull(responseOrder.getId());
+		Assert.assertFalse(responseOrder.getId().isEmpty());
+	}
 
     @Test
     public void testGetNotFoundOrder() throws Exception {
-        this.mockMvc.perform(get(SERVICE_URI + "/" + "test")
+        String jsonResponse = this.mockMvc.perform(get(SERVICE_URI + "/" + "test")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        ).andExpect(status().isNotFound())
-		.andExpect(jsonPath("$.status").value(Status.ERROR.name()));
+        ).andExpect(status().isNotFound()).andReturn().getResponse().getContentAsString();
+        ResponseWrapper response = JsonPath.parse(jsonResponse).read("$", ResponseWrapper.class);
+		Assert.assertTrue(response.getStatus() == Status.ERROR);
+
     }
 
     @Test
     public void testGetOrder() throws Exception {
-        this.mockMvc.perform(get(SERVICE_URI + "/" + orderDataset.get_id())
+		String jsonResponse = this.mockMvc.perform(get(SERVICE_URI + "/" + orderDataset.get_id())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        ).andExpect(status().isOk())
-		.andExpect(jsonPath("$.data.id").value(orderDataset.get_id()));
-
+        ).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+		Order responseOrder = JsonPath.parse(jsonResponse).read("$.data",Order.class);
+		Assert.assertNotNull(responseOrder.getId());
+		Assert.assertFalse(responseOrder.getId().isEmpty());
     }
 }
 
