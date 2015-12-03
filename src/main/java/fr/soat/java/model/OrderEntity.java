@@ -13,8 +13,8 @@ public class OrderEntity {
     @Id
     private String _id;
     private List<ProductEntity> productList;
-    private Date creationDate;
-    private Date modificationDate;
+    private String creationDate;
+    private String modificationDate;
 
     public String get_id() {
         return _id;
@@ -31,19 +31,19 @@ public class OrderEntity {
         return productList;
     }
 
-    public Date getCreationDate() {
+    public String getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
     }
 
-    public Date getModificationDate() {
+    public String getModificationDate() {
         return modificationDate;
     }
 
-    public void setModificationDate(Date modificationDate) {
+    public void setModificationDate(String modificationDate) {
         this.modificationDate = modificationDate;
     }
 }

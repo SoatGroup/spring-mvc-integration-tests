@@ -1,48 +1,46 @@
 package fr.soat.java.payload;
 
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Order {
-    private String id;
-    private List<Product> products;
-    private Date creationDate;
-    private Date modificationDate;
+	private String id;
+	private List<Product> products;
+	private String creationDate;
+	private String modificationDate;
 
-    public String getId() {
-        return id;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public List<Product> getProducts() {
-        if (products == null) {
-            products = new ArrayList<>();
-        }
-        return products;
-    }
+	public List<Product> getProducts() {
+		if (products == null) {
+			products = new ArrayList<>();
+		}
+		return products;
+	}
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
 
-    public Date getCreationDate() {
-        return creationDate;
-    }
+	public String getCreationDate() {
+		return creationDate;
+	}
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
+	public void setCreationDate(String creationDate) {
+		this.creationDate = creationDate;
+	}
 
-    public Date getModificationDate() {
-        return modificationDate;
-    }
+	public String getModificationDate() {
+		return modificationDate;
+	}
 
-    public void setModificationDate(Date modificationDate) {
-        this.modificationDate = modificationDate;
-    }
+	public void setModificationDate(String modificationDate) {
+		this.modificationDate = modificationDate;
+	}
 }

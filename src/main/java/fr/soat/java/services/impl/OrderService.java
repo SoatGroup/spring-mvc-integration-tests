@@ -11,6 +11,8 @@ import fr.soat.java.services.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Service
@@ -26,13 +28,13 @@ public class OrderService implements IOrderService {
         if (orderDto.getProductList().size() > NB_MAX_PRODUCTS) {
             throw new TooManyProductsException();
         }
-        orderDto.setCreationDate(new Date());
+        orderDto.setCreationDate(Instant.now().toString());
         return fromOrderEntity(orderRepository.save(toOrderEntity(orderDto)));
     }
 
     @Override
     public OrderDto updateOrder(OrderDto orderDto) throws TooManyProductsException {
-        orderDto.setModificationDate(new Date());
+        orderDto.setModificationDate(Instant.now().toString());
         return saveOrder(orderDto);
     }
 
