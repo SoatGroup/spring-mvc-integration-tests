@@ -1,10 +1,10 @@
 package fr.soat.java.webservices.test.integration;
 
 import fr.soat.java.dao.IOrderRepository;
+import fr.soat.java.enums.Status;
 import fr.soat.java.model.OrderEntity;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -53,10 +54,11 @@ public class OrderWebServiceTest {
     @Test
     public void testSaveOrder() throws Exception {
         String payload = "{ \"products\": [{ \"name\": \"Mon produit\" }]}";
-        MockHttpServletRequestBuilder req = post(SERVICE_URI).contentType(MediaType.APPLICATION_JSON)
+        this.mockMvc.perform(post(SERVICE_URI).contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
-                .content(payload);
-        this.mockMvc.perform(req).andExpect(status().isOk());
+                .content(payload)
+		).andExpect(status().isOk())
+		.andExpect(jsonPath("$.data.id").isNotEmpty());
     }
 
     @Test
@@ -64,7 +66,8 @@ public class OrderWebServiceTest {
         this.mockMvc.perform(get(SERVICE_URI + "/" + "test")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        ).andExpect(status().isNotFound());
+        ).andExpect(status().isNotFound())
+		.andExpect(jsonPath("$.status").value(Status.ERROR.name()));
     }
 
     @Test
@@ -72,7 +75,9 @@ public class OrderWebServiceTest {
         this.mockMvc.perform(get(SERVICE_URI + "/" + orderDataset.get_id())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        ).andExpect(status().isOk());
+        ).andExpect(status().isOk())
+		.andExpect(jsonPath("$.data.id").value(orderDataset.get_id()));
+
     }
 }
 

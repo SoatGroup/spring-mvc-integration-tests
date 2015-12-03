@@ -13,7 +13,7 @@ public class ExceptionControllerAdvice {
     @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
     @ExceptionHandler(TooManyProductsException.class)
     @ResponseBody
-    public ResponseWrapper<String> handleBusinessException(TooManyProductsException exception) {
+    public ResponseWrapper<String> handleTooManyProductsException(TooManyProductsException exception) {
         return handleExceptionObject(exception);
     }
 
