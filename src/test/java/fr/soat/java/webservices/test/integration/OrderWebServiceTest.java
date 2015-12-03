@@ -1,5 +1,8 @@
 package fr.soat.java.webservices.test.integration;
 
+import fr.soat.java.dao.IOrderRepository;
+import fr.soat.java.model.OrderEntity;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -14,6 +17,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,9 +33,21 @@ public class OrderWebServiceTest {
 
     private static final String SERVICE_URI = "/order";
 
+    private OrderEntity orderDataset;
+
+    @Autowired
+    private IOrderRepository dao;
+
     @Before
     public void setUp() throws Exception {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+        orderDataset = new OrderEntity();
+        orderDataset = dao.save(orderDataset);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        dao.delete(orderDataset.get_id());
     }
 
     @Test
@@ -44,11 +60,19 @@ public class OrderWebServiceTest {
     }
 
     @Test
+    public void testGetNotFoundOrder() throws Exception {
+        this.mockMvc.perform(get(SERVICE_URI + "/" + "test")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        ).andExpect(status().isNotFound());
+    }
+
+    @Test
     public void testGetOrder() throws Exception {
-        MockHttpServletRequestBuilder req = get(SERVICE_URI + "/" + "test").contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.parseMediaType(MediaType.APPLICATION_JSON_UTF8_VALUE));
-        this.mockMvc.perform(req)
-                .andExpect(status().isNotFound());
+        this.mockMvc.perform(get(SERVICE_URI + "/" + orderDataset.get_id())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        ).andExpect(status().isOk());
     }
 }
 
