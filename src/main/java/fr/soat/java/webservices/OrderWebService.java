@@ -1,13 +1,5 @@
 package fr.soat.java.webservices;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import fr.soat.java.dto.OrderDto;
 import fr.soat.java.dto.ProductDto;
 import fr.soat.java.exceptions.OrderNotFoundException;
@@ -16,6 +8,8 @@ import fr.soat.java.payload.Order;
 import fr.soat.java.payload.Product;
 import fr.soat.java.payload.wrappers.ResponseWrapper;
 import fr.soat.java.services.IOrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value= "/order")
@@ -65,7 +59,7 @@ public class OrderWebService {
         order.setCreationDate(dto.getCreationDate());
         order.setId(dto.getId());
         order.setModificationDate(dto.getModificationDate());
-        dto.getProductList().forEach((productDto -> order.getProducts().add(fromProductDto(productDto))));
+        dto.getProducts().forEach((productDto -> order.getProducts().add(fromProductDto(productDto))));
         return order;
     }
 
@@ -80,7 +74,7 @@ public class OrderWebService {
         dto.setCreationDate(order.getCreationDate());
         dto.setId(order.getId());
         dto.setModificationDate(order.getModificationDate());
-        order.getProducts().forEach((product -> dto.getProductList().add(toProductDto(product))));
+        order.getProducts().forEach((product -> dto.getProducts().add(toProductDto(product))));
         return dto;
     }
 

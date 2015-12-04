@@ -37,20 +37,20 @@ public class OrderServiceTest {
     public void testMoreThanProductLimitSaveOrder() throws Exception {
         when(orderRepository.save(any(OrderEntity.class))).thenReturn(null);
         OrderDto orderDto = new OrderDto();
-        orderDto.getProductList().add(new ProductDto());
-        orderDto.getProductList().add(new ProductDto());
-        orderDto.getProductList().add(new ProductDto());
+        orderDto.getProducts().add(new ProductDto());
+        orderDto.getProducts().add(new ProductDto());
+        orderDto.getProducts().add(new ProductDto());
         orderService.saveOrder(orderDto);
     }
 
     @Test
     public void testSaveOrder() throws Exception {
         OrderDto orderDto = new OrderDto();
-        orderDto.getProductList().add(new ProductDto());
+        orderDto.getProducts().add(new ProductDto());
         OrderEntity mockEntity = new OrderEntity();
         mockEntity.getProductList().add(new ProductEntity());
         when(orderRepository.save(any(OrderEntity.class))).thenReturn(mockEntity);
         OrderDto res = orderService.saveOrder(orderDto);
-        Assert.assertTrue(res.getProductList().size() == 1);
+        Assert.assertTrue(res.getProducts().size() == 1);
     }
 }

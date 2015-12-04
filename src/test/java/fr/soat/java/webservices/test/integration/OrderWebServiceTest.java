@@ -6,13 +6,14 @@ import fr.soat.java.enums.Status;
 import fr.soat.java.model.OrderEntity;
 import fr.soat.java.payload.Order;
 import fr.soat.java.payload.wrappers.ResponseWrapper;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Commit;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.TestExecutionListeners;
@@ -21,6 +22,7 @@ import org.springframework.test.context.support.AbstractTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -71,6 +73,9 @@ public class OrderWebServiceTest extends AbstractTestExecutionListener {
 	}
 
 	@Test
+	@Rollback(true)
+	@Commit
+	@Transactional
 	public void testSaveOrder() throws Exception {
 		String payload = "{ \"products\": [{ \"name\": \"Mon produit\" }]}";
 		String jsonResponse = this.mockMvc

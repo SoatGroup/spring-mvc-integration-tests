@@ -1,12 +1,11 @@
 package fr.soat.java.dto;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class OrderDto {
     private String id;
-    private List<ProductDto> productList;
+    private List<ProductDto> products;
     private String creationDate;
     private String modificationDate;
 
@@ -18,11 +17,11 @@ public class OrderDto {
         this.id = id;
     }
 
-    public List<ProductDto> getProductList() {
-        if (productList == null) {
-            productList = new ArrayList<>();
+    public List<ProductDto> getProducts() {
+        if (products == null) {
+            products = new ArrayList<>();
         }
-        return productList;
+        return products;
     }
 
     public String getCreationDate() {

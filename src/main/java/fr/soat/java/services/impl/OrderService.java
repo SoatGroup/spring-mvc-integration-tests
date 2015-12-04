@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDate;
-import java.util.Date;
 
 @Service
 public class OrderService implements IOrderService {
@@ -25,7 +23,7 @@ public class OrderService implements IOrderService {
 
     @Override
     public OrderDto saveOrder(OrderDto orderDto) throws TooManyProductsException {
-        if (orderDto.getProductList().size() > NB_MAX_PRODUCTS) {
+        if (orderDto.getProducts().size() > NB_MAX_PRODUCTS) {
             throw new TooManyProductsException();
         }
         orderDto.setCreationDate(Instant.now().toString());
@@ -57,7 +55,7 @@ public class OrderService implements IOrderService {
         order.setCreationDate(entity.getCreationDate());
         order.setId(entity.get_id());
         order.setModificationDate(entity.getModificationDate());
-        entity.getProductList().forEach((productEntity -> order.getProductList().add(fromProductEntity(productEntity))));
+        entity.getProductList().forEach((productEntity -> order.getProducts().add(fromProductEntity(productEntity))));
         return order;
     }
 
@@ -72,7 +70,7 @@ public class OrderService implements IOrderService {
         entity.setCreationDate(order.getCreationDate());
         entity.set_id(order.getId());
         entity.setModificationDate(order.getModificationDate());
-        order.getProductList().forEach((product -> entity.getProductList().add(toProductEntity(product))));
+        order.getProducts().forEach((product -> entity.getProductList().add(toProductEntity(product))));
         return entity;
     }
 
